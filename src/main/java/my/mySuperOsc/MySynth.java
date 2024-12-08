@@ -4,12 +4,14 @@ import com.jsyn.Synthesizer;
 import com.jsyn.unitgen.*;
 import my.mySuperOsc.midi.ReceiverAdapter;
 
+import java.util.List;
+
 public class MySynth{
     ReceiverAdapter receiver;
     Synthesizer synth;
     LineOut lineOut;
     MonoMidiToSynth monoMidiToSynth;
-    UnitOscillator oscillator;
+    List<UnitOscillator> oscillators;
 
     public MySynth(ReceiverAdapter receiver, Synthesizer synth, LineOut lineOut) {
         this.receiver = receiver;
@@ -26,17 +28,18 @@ public class MySynth{
     }
     public void setUp () {
         this.monoMidiToSynth = new MonoMidiToSynth();
-        var osc = new SawtoothOscillator();
-        this.oscillator = osc;
-        synth.add(osc);
+        this.oscillators = List.of(new SawtoothOscillator(), new SquareOscillator());
+        this.oscillators.forEach(osc ->synth.add(osc));
         var lag = new LinearRamp();
         this.monoMidiToSynth.setLag(lag);
         synth.add( lag);
 
-        this.monoMidiToSynth.setOscillator(osc);
+        this.monoMidiToSynth.setOscillator(this.oscillators);
 
 //        this.monoRunner.setReceiverAdapter(receiver);
+        this.oscillators.forEach(osc->{
         osc.output.connect( 0, lineOut.input, 0 );
         osc.output.connect( 0, lineOut.input, 1 );
+        });
     }
 }

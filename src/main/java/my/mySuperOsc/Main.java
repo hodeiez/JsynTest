@@ -23,7 +23,7 @@ public class Main {
         ReceiverAdapter rc= new ReceiverAdapter();
         MySynth ms = new MySynth(rc,synth, lineOut);
         var runner = new MonoMidiToSynth();
-        runner.setOscillator(ms.oscillator);
+        runner.setOscillator(ms.oscillators);
         rc.setRunner(runner);
         m.getSelectedDevice().open();
 

@@ -1,12 +1,14 @@
 package my.mySuperOsc;
 
 import com.jsyn.unitgen.LinearRamp;
+import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
 
 import javax.sound.midi.ShortMessage;
+import java.util.List;
 
 public class MonoMidiToSynth {
-    UnitOscillator oscillator;
+    List<UnitOscillator> oscillators;
     private final double[] activeNotes = new double[128];
     private int activeNoteCount = 0;
     private LinearRamp lag = new LinearRamp();
@@ -22,8 +24,8 @@ public class MonoMidiToSynth {
 
         lag.time.set(  0.2 );
     }
-    public void setOscillator(UnitOscillator oscillator) {
-        this.oscillator = oscillator;
+    public void setOscillator(List<UnitOscillator> oscillators) {
+        this.oscillators = oscillators;
     }
 
     public void midiToSound(ShortMessage message) {
@@ -45,8 +47,10 @@ public class MonoMidiToSynth {
     }
 
     private void setOsc(int note,int vel){
-        oscillator.frequency.set(noteToFreq(note));
-        oscillator.amplitude.set(velToAmp(vel));
+        this.oscillators.forEach(oscillator ->{
+            oscillator.frequency.set(noteToFreq(note));
+            oscillator.amplitude.set(velToAmp(vel));
+        });
 
     }
 
@@ -76,7 +80,7 @@ public class MonoMidiToSynth {
         activeNoteCount = newCount;
 
         if (activeNoteCount == 0) {
-            oscillator.stop();
+            this.oscillators.forEach(UnitGenerator::stop);
         }
     }
     private double noteToFreq(int note) {
