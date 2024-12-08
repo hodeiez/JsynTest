@@ -1,19 +1,57 @@
 package my.mySuperOsc;
 
 
+import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
 import com.jsyn.devices.AudioDeviceManager;
 import com.jsyn.ports.UnitInputPort;
 import com.jsyn.ports.UnitVariablePort;
 import com.jsyn.swing.JAppletFrame;
-import com.jsyn.unitgen.LineOut;
-import com.jsyn.unitgen.SawtoothOscillator;
-import com.jsyn.unitgen.WhiteNoise;
+import com.jsyn.unitgen.*;
+import my.mySuperOsc.midi.MidiSetup;
+import my.mySuperOsc.midi.ReceiverAdapter;
+
+import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Transmitter;
 
 import static com.jsyn.JSyn.createSynthesizer;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MidiUnavailableException {
+        MidiSetup m = new MidiSetup();
+        // select from list
+        m.selectMidiDevice(6,m.listMidiDevices());
+
+
+        var synth = JSyn.createSynthesizer();
+
+        var lineOut = new LineOut();
+        ReceiverAdapter rc= new ReceiverAdapter();
+        MySynth ms = new MySynth(rc,synth, lineOut);
+
+        m.getSelectedDevice().open();
+
+
+        m.connectMidiKeyboard(m.getSelectedDevice(),rc);
+        System.out.println(m.getSelectedDevice().getTransmitters().size());
+
+        ms.start();
+
+        while (true) {
+            ms.runner.run();
+        }
+
+        /*
+        var mid  = new MidiKeyboard();
+
+        mid.run();
+
+
+ */
+
+        /*
 
         SawFaders applet = new SawFaders();
         JAppletFrame frame = new JAppletFrame( "SawFaders", applet );
@@ -21,6 +59,8 @@ public class Main {
         frame.setVisible( true );
         frame.test();
 
+
+         */
         // my simple example, a white noise and a low saw osc
         /*
        Synthesizer synth =createSynthesizer();
