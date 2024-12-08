@@ -2,19 +2,11 @@ package my.mySuperOsc;
 
 
 import com.jsyn.JSyn;
-import com.jsyn.Synthesizer;
-import com.jsyn.devices.AudioDeviceManager;
-import com.jsyn.ports.UnitInputPort;
-import com.jsyn.ports.UnitVariablePort;
-import com.jsyn.swing.JAppletFrame;
 import com.jsyn.unitgen.*;
 import my.mySuperOsc.midi.MidiSetup;
 import my.mySuperOsc.midi.ReceiverAdapter;
 
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Transmitter;
 
 import static com.jsyn.JSyn.createSynthesizer;
 
@@ -30,7 +22,9 @@ public class Main {
         var lineOut = new LineOut();
         ReceiverAdapter rc= new ReceiverAdapter();
         MySynth ms = new MySynth(rc,synth, lineOut);
-
+        var runner = new MonoMidiToSynth();
+        runner.setOscillator(ms.oscillator);
+        rc.setRunner(runner);
         m.getSelectedDevice().open();
 
 
@@ -40,7 +34,7 @@ public class Main {
         ms.start();
 
         while (true) {
-            ms.runner.run();
+            ms.lineOut.flattenOutputs();
         }
 
         /*
