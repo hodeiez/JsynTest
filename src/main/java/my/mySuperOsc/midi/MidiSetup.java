@@ -20,7 +20,7 @@ public class MidiSetup {
             try {
                 MidiDevice device = MidiSystem.getMidiDevice(info[i]);
                 devices.put(i,device);
-                System.out.println((i + 1) + ". Name: " + device.getDeviceInfo().getName());
+                System.out.println((i) + ". Name: " + device.getDeviceInfo().getName());
             } catch (MidiUnavailableException e) {
                 System.out.println("Error accessing device: " + e.getMessage());
             }
