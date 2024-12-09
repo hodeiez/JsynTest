@@ -5,12 +5,11 @@ import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
 
 import javax.sound.midi.ShortMessage;
-import java.util.Arrays;
 import java.util.List;
 
 public class MonoMidiToSynth {
     List<UnitOscillator> oscillators;
-    private final double[] activeNotes = new double[129];
+    private final double[] activeNotes = new double[128];
     private int activeNoteCount = 0;
     private LinearRamp lag = new LinearRamp();
 
@@ -53,23 +52,23 @@ public class MonoMidiToSynth {
     }
 
     private void noteOn(int note,int vel) {
-        System.out.println(activeNoteCount);
+
         if (activeNoteCount < activeNotes.length) {
             activeNotes[activeNoteCount] = note;
-
             activeNoteCount++;
             setOsc(note,vel);
+        } else if ( activeNoteCount == activeNotes.length) {
+            activeNotes[activeNoteCount-1] = note;
+            setOsc(note,vel);
+
         }
     }
 
     private void noteOff(int note) {
-        System.out.println(activeNoteCount);
-        setOsc(note,0);
-       Arrays.stream(activeNotes).forEach(System.out::println);
         for (int i = 0; i < activeNoteCount; i++) {
             if (activeNotes[i] == note) {
-
                 activeNotes[i] = -1;
+                setOsc(note,0);
                 break;
             }
         }
@@ -79,7 +78,6 @@ public class MonoMidiToSynth {
                 activeNotes[newCount++] = n;
             }
         }
-        System.arraycopy(activeNotes, 0, activeNotes, 0, newCount);
         activeNoteCount = newCount;
 
         if (activeNoteCount == 0) {

@@ -22,7 +22,7 @@ public class ReceiverAdapter implements Receiver {
 
             int command = shortMsg.getCommand();
           //  if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF  ) {
-                System.out.println("Received MIDI event: Command=" + command + ", Note=" + ((ShortMessage) message).getData1() + ", Velocity=" + ((ShortMessage) message).getData2());
+             //   System.out.println("Received MIDI event: Command=" + command + ", Note=" + ((ShortMessage) message).getData1() + ", Velocity=" + ((ShortMessage) message).getData2());
                 this.runner.midiToSound(shortMsg);
            // }
         }
