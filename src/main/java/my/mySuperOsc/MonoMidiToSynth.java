@@ -5,11 +5,12 @@ import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.UnitOscillator;
 
 import javax.sound.midi.ShortMessage;
+import java.util.Arrays;
 import java.util.List;
 
 public class MonoMidiToSynth {
     List<UnitOscillator> oscillators;
-    private final double[] activeNotes = new double[128];
+    private final double[] activeNotes = new double[129];
     private int activeNoteCount = 0;
     private LinearRamp lag = new LinearRamp();
 
@@ -20,11 +21,9 @@ public class MonoMidiToSynth {
 
     public void setLag(LinearRamp lag) {
         this.lag = lag;
-        //  lag.output.connect( osc.amplitude );
-
-        lag.time.set(  0.2 );
+      lag.time.set(  0.05 );
     }
-    public void setOscillator(List<UnitOscillator> oscillators) {
+    public void setOscillators(List<UnitOscillator> oscillators) {
         this.oscillators = oscillators;
     }
 
@@ -36,11 +35,10 @@ public class MonoMidiToSynth {
             if (message.getCommand() == ShortMessage.NOTE_OFF) {
                 this.noteOff(message.getData1());
                // this.lag.input.setup( 0.0, 0., 1.0 );
-            } else if (message.getCommand() == ShortMessage.NOTE_ON) {
-                var note = message.getData1();
-                //this.lag.input.setup( 0.0, velToAmp(message.getData2()), 1.0 );
+            }
+            if (message.getCommand() == ShortMessage.NOTE_ON) {
 
-                this.noteOn(note,message.getData2());
+                this.noteOn(message.getData1(),message.getData2());
 
             }
         }
@@ -55,17 +53,22 @@ public class MonoMidiToSynth {
     }
 
     private void noteOn(int note,int vel) {
+        System.out.println(activeNoteCount);
         if (activeNoteCount < activeNotes.length) {
             activeNotes[activeNoteCount] = note;
-            setOsc(note,vel);
+
             activeNoteCount++;
+            setOsc(note,vel);
         }
     }
 
     private void noteOff(int note) {
+        System.out.println(activeNoteCount);
+        setOsc(note,0);
+       Arrays.stream(activeNotes).forEach(System.out::println);
         for (int i = 0; i < activeNoteCount; i++) {
             if (activeNotes[i] == note) {
-                setOsc(note,0);
+
                 activeNotes[i] = -1;
                 break;
             }

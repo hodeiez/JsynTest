@@ -28,13 +28,13 @@ public class MySynth{
     }
     public void setUp () {
         this.monoMidiToSynth = new MonoMidiToSynth();
-        this.oscillators = List.of(new SawtoothOscillator(), new SquareOscillator());
+        this.oscillators = List.of(new SawtoothOscillator(), new SquareOscillator(), new SineOscillator());
         this.oscillators.forEach(osc ->synth.add(osc));
         var lag = new LinearRamp();
         this.monoMidiToSynth.setLag(lag);
-        synth.add( lag);
+       // synth.add( lag);
 
-        this.monoMidiToSynth.setOscillator(this.oscillators);
+       // this.monoMidiToSynth.setOscillators(this.oscillators);
 
 //        this.monoRunner.setReceiverAdapter(receiver);
         this.oscillators.forEach(osc->{
