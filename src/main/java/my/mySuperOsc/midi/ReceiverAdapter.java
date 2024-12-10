@@ -1,6 +1,6 @@
 package my.mySuperOsc.midi;
 
-import my.mySuperOsc.MonoMidiToSynth;
+import my.mySuperOsc.midiToSynth.MidiToVoices;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -8,10 +8,10 @@ import javax.sound.midi.ShortMessage;
 
 public class ReceiverAdapter implements Receiver {
 
-    private MonoMidiToSynth runner;
+    private MidiToVoices runner;
 
 
-    public void setRunner(MonoMidiToSynth runner) {
+    public void setRunner(MidiToVoices runner) {
         this.runner = runner;
     }
 

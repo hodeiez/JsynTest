@@ -3,6 +3,8 @@ package my.mySuperOsc;
 import com.jsyn.Synthesizer;
 import com.jsyn.unitgen.*;
 import my.mySuperOsc.midi.ReceiverAdapter;
+import my.mySuperOsc.midiToSynth.MidiToVoices;
+import my.mySuperOsc.soundEngines.MyVoice;
 
 import java.util.List;
 
@@ -10,8 +12,8 @@ public class MySynth{
     ReceiverAdapter receiver;
     Synthesizer synth;
     LineOut lineOut;
-    MonoMidiToSynth monoMidiToSynth;
-    List<UnitOscillator> oscillators;
+    MidiToVoices midiToVoices;
+    List<MyVoice> voices;
 
     public MySynth(ReceiverAdapter receiver, Synthesizer synth, LineOut lineOut) {
         this.receiver = receiver;
@@ -27,19 +29,17 @@ public class MySynth{
         this.synth.start();
     }
     public void setUp () {
-        this.monoMidiToSynth = new MonoMidiToSynth();
-        this.oscillators = List.of(new SawtoothOscillator(), new SquareOscillator(), new SineOscillator());
-        this.oscillators.forEach(osc ->synth.add(osc));
+        this.midiToVoices = new MidiToVoices();
+        var voice = new MyVoice();
+        voice.setOscillators( List.of(new SawtoothOscillator(), new SquareOscillator(), new SineOscillator()));
+        this.voices=List.of(voice);
+        this.voices.forEach(v->v.getOscillators().forEach(osc ->synth.add(osc)));
         var lag = new LinearRamp();
-        this.monoMidiToSynth.setLag(lag);
-       // synth.add( lag);
+        this.midiToVoices.setLag(lag);
 
-       // this.monoMidiToSynth.setOscillators(this.oscillators);
-
-//        this.monoRunner.setReceiverAdapter(receiver);
-        this.oscillators.forEach(osc->{
+        this.voices.forEach(v->v.getOscillators().forEach(osc->{
         osc.output.connect( 0, lineOut.input, 0 );
         osc.output.connect( 0, lineOut.input, 1 );
-        });
+        }));
     }
 }
