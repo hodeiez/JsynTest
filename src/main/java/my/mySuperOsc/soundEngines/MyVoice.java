@@ -51,6 +51,7 @@ public class MyVoice implements UnitVoice {
 
     @Override
     public void noteOff(TimeStamp timeStamp) {
+        this.oscillators.forEach(osc->osc.frequency.set(0.));
         this.oscillators.forEach(UnitGenerator::stop);
     }
 

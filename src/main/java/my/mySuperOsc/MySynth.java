@@ -31,8 +31,10 @@ public class MySynth{
     public void setUp () {
         this.midiToVoices = new MidiToVoices();
         var voice = new MyVoice();
-        voice.setOscillators( List.of(new SawtoothOscillator(), new SquareOscillator(), new SineOscillator()));
-        this.voices=List.of(voice);
+        var voice2 = new MyVoice();
+        voice.setOscillators( List.of(new SineOscillator(), new SineOscillator()));
+        voice2.setOscillators( List.of( new SineOscillatorPhaseModulated(), new SineOscillator()));
+        this.voices=List.of(voice,voice2);
         this.voices.forEach(v->v.getOscillators().forEach(osc ->synth.add(osc)));
         var lag = new LinearRamp();
         this.midiToVoices.setLag(lag);
@@ -41,5 +43,7 @@ public class MySynth{
         osc.output.connect( 0, lineOut.input, 0 );
         osc.output.connect( 0, lineOut.input, 1 );
         }));
+        //set all oscillators gain 0. to start without noise :)
+        this.voices.forEach(v->v.getOscillators().forEach(osc->osc.amplitude.set(0.)));
     }
 }
