@@ -3,12 +3,14 @@ package my.mySuperOsc.gui;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -21,18 +23,28 @@ public class MainWindow {
 
         // Create a neon background rectangle
         Rectangle bg = new Rectangle(0, 0, 800, 200);
-        bg.setFill(Color.color(0.8f, 0.2f, 0.6f));
+        bg.setFill(Color.BLACK);
         root.getChildren().add(bg);
 
         // Create the text
         Text text = new Text(0, 0, "PROCASTRINATOR-SYNTH 2024");
         text.setFont(Font.font("Courier New", 48));
         text.setFill(Color.YELLOW);
-
+        // Create the text
+        TextFlow textFlow = new TextFlow();
+        textFlow.setTranslateX(root.getPrefWidth() / 12);
+        textFlow.setTranslateY(0);
+        textFlow.getChildren().add(text);
         // Apply effects
-        text.setEffect(new Glow(0.9f));
-        text.setCache(true);
+        Glow g = new Glow(0.9);
 
+        text.setEffect(g);
+        text.setCache(true);
+        DropShadow ds =new DropShadow();
+        ds.setSpread(0.9);
+        ds.setColor(Color.BLUEVIOLET);
+        text.setEffect(ds);
+        text.setCache(true);
 
         text.setTranslateX(root.getPrefWidth() / 12);
         text.setTranslateY(root.getPrefHeight() / 2);
