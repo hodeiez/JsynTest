@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class MainWindow {
 
 
-    public static void start(){
+    public static Pane start(){
         Pane root = new Pane();
         root.setPrefSize(800, 200);
 
@@ -46,22 +46,11 @@ public class MainWindow {
         text.setEffect(ds);
         text.setCache(true);
 
-        text.setTranslateX(root.getPrefWidth() / 12);
+        text.setTranslateX(root.getPrefWidth() / 16);
         text.setTranslateY(root.getPrefHeight() / 2);
 
         root.getChildren().add(text);
 
-        Scene scene = new Scene(root);
-
-        // Center the window on the screen
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-
-        // Calculate and set the initial position
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
-        stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
-
+        return root;
     }
 }

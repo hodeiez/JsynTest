@@ -1,64 +1,66 @@
 package my.mySuperOsc;
 
 
-import com.jsyn.JSyn;
-import com.jsyn.unitgen.*;
+import com.sun.javafx.scene.shape.PolygonHelper;
 import javafx.application.Application;
-import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import my.mySuperOsc.gui.Controller;
 import my.mySuperOsc.gui.MainWindow;
-import my.mySuperOsc.midi.MidiSetup;
-import my.mySuperOsc.midi.ReceiverAdapter;
-import my.mySuperOsc.midiToSynth.MidiToVoices;
-
-import javax.sound.midi.MidiUnavailableException;
-
+import my.mySuperOsc.theSynth.MySynth;
 
 
 public class Main extends Application {
+
     public static void main(String[] args) {
-        //just for testing javafx works
-        Thread synth = new Thread(Main::runSynth);
-        synth.start();
         launch();
-
-
     }
-
 
     @Override
-    public void start(Stage stage) throws Exception {
-        MainWindow.start();
+    public void start(Stage stage)  {
+
+        Controller controller = new Controller();
+
+        //start button
+        Button startButton = new Button("Click Me to Start Synth");
+        startButton.setOnAction(e -> controller.startSynth());
+        startButton.setStyle("-fx-background-color: radial-gradient(center 50% -25%, radius 50%, #00ff29, #0000ff)");
+        DropShadow ds =new DropShadow();
+        ds.setSpread(0.5);
+        ds.setColor(Color.BLUEVIOLET);
+        startButton.setEffect(ds);
+        startButton.setTextFill(Color.WHITE);
+
+
+
+        controller.setPrimaryStage(stage);
+
+        Pane root =MainWindow.start();
+        root.getChildren().addAll(startButton);
+        Scene scene = new Scene(root);
+        startButton.setTranslateX(root.getPrefWidth() / 2.4);
+        startButton.setTranslateY(root.getPrefHeight() / 1.5);
+        // Center the window on the screen
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+
+        // Calculate and set the initial position
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
     }
-    private static void runSynth() {
 
-
-        MidiSetup m = new MidiSetup();
-        // select from list
-        m.selectMidiDevice(6,m.listMidiDevices());
-
-
-        var synth = JSyn.createSynthesizer();
-
-        var lineOut = new LineOut();
-        ReceiverAdapter rc= new ReceiverAdapter();
-        MySynth ms = new MySynth(rc,synth, lineOut);
-        var runner = new MidiToVoices();
-        runner.setVoices(ms.voices);
-        rc.setRunner(runner);
-        try {
-            m.getSelectedDevice().open();
-
-
-            m.connectMidiKeyboard(m.getSelectedDevice(), rc);
-            System.out.println(m.getSelectedDevice().getTransmitters().size());
-        } catch (MidiUnavailableException e){
-            System.out.println("WRONG SELECTED MIDI");
-        }
-        ms.start();
-
-        while (true) {
-            ms.lineOut.flattenOutputs();
-        }
-    }
 }
