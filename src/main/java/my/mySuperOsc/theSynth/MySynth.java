@@ -70,6 +70,8 @@ public class MySynth{
         osc.output.connect( 0, lineOut.input, 0 );
         osc.output.connect( 0, lineOut.input, 1 );
         }));
+
+
         //set all oscillators gain 0. to start without noise :)
         this.voices.forEach(v->v.getOscillators().forEach(osc->osc.amplitude.set(0.)));
     }
@@ -81,8 +83,6 @@ public class MySynth{
         receiver.setRunner(runner);
         try {
             ms.getSelectedDevice().open();
-
-
             ms.connectMidiKeyboard(ms.getSelectedDevice(), receiver);
             System.out.println(ms.getSelectedDevice().getTransmitters().size());
         } catch (MidiUnavailableException e){
