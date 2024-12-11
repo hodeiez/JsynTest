@@ -61,7 +61,7 @@ public class MidiToVoices {
             firstFound.noteOn(noteToFreq(note),velToAmp(vel), new TimeStamp(System.currentTimeMillis()));
             activeVoices.put(new NoteAndOrder(note,voiceIndexStart++),firstFound);
         } else {
-            var firstFound =findFirstActiveVoice();
+            var firstFound =findFirstActiveVoice(note);
             removeSelectedFromActive(firstFound);
             firstFound.noteOn(noteToFreq(note),velToAmp(vel), new TimeStamp(System.currentTimeMillis()));
             activeVoices.put(new NoteAndOrder(note,0),firstFound);
@@ -103,8 +103,8 @@ public class MidiToVoices {
     private void removeSelectedFromActive(MyVoice voice){
         activeVoices.entrySet().removeIf(e->e.getValue().getUuid().equals(voice.getUuid()));
     }
-    private MyVoice findFirstActiveVoice(){
-        return activeVoices.entrySet().stream().filter(e -> e.getKey().order == 0).findFirst().orElse(null).getValue();
+    private MyVoice findFirstActiveVoice(int note){
+        return activeVoices.entrySet().stream().filter(e -> e.getKey().order <= voiceIndexStart && e.getKey().note!=note).findFirst().orElse(null).getValue();
     }
 public class NoteAndOrder {
         int note;
