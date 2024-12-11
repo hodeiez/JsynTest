@@ -30,11 +30,16 @@ public class MySynth{
     }
     public void setUp () {
         this.midiToVoices = new MidiToVoices();
+
+
         var voice = new MyVoice();
         var voice2 = new MyVoice();
+        var voice3 = new MyVoice();
         voice.setOscillators( List.of(new SineOscillator(), new SineOscillator()));
         voice2.setOscillators( List.of( new SineOscillatorPhaseModulated(), new SineOscillator()));
-        this.voices=List.of(voice,voice2);
+        voice3.setOscillators( List.of( new SineOscillatorPhaseModulated(), new SineOscillator()));
+        this.voices=List.of(voice,voice2,voice3);
+
         this.voices.forEach(v->v.getOscillators().forEach(osc ->synth.add(osc)));
         var lag = new LinearRamp();
         this.midiToVoices.setLag(lag);

@@ -8,6 +8,7 @@ import javax.sound.midi.ShortMessage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static my.mySuperOsc.midiToSynth.MidiToSynthUtil.noteToFreq;
 import static my.mySuperOsc.midiToSynth.MidiToSynthUtil.velToAmp;
@@ -17,6 +18,7 @@ public class MidiToVoices {
     Map<NoteAndOrder, MyVoice> activeVoices = new HashMap<>();
     int maxVoices;
     int voiceIndexStart = 0;
+    int oscAmount;
     private LinearRamp lag = new LinearRamp();
 
 
@@ -36,6 +38,7 @@ public class MidiToVoices {
     public void setVoices(List<MyVoice> voices) {
         this.voices = voices;
         this.maxVoices = voices.size();
+        this.oscAmount=voices.stream().map(MyVoice::getOscillatorAmount).mapToInt(Integer::intValue).sum();
     }
 
     public void midiToSound(ShortMessage message) {
@@ -57,13 +60,13 @@ public class MidiToVoices {
 
         if (isFreeVoiceSlot()) {
             var firstFound = findFirstFreeVoice();
-            firstFound.noteOn(noteToFreq(note), velToAmp(vel), new TimeStamp(System.currentTimeMillis()));
+            firstFound.noteOn(noteToFreq(note), velToAmp(vel,oscAmount), new TimeStamp(System.currentTimeMillis()));
             activeVoices.put(new NoteAndOrder(note, voiceIndexStart++), firstFound);
         } else {
 
             var firstFound = findFirstActiveVoice(note);
 
-            firstFound.noteOn(noteToFreq(note), velToAmp(vel), new TimeStamp(System.currentTimeMillis()));
+            firstFound.noteOn(noteToFreq(note), velToAmp(vel,oscAmount), new TimeStamp(System.currentTimeMillis()));
             removeSelectedFromActive(firstFound);
             activeVoices.put(new NoteAndOrder(note, 0), firstFound);
 

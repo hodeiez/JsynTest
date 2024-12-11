@@ -15,7 +15,9 @@ public class MyVoice implements UnitVoice {
     List<EnvelopeDAHDSR> envelopes;
     String uuid;
 
-
+    public int getOscillatorAmount() {
+        return oscillators.size();
+    }
 
     public MyVoice() {
         this.uuid = UUID.randomUUID().toString();
