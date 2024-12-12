@@ -26,7 +26,10 @@ public class MySynth{
         this.synth.add(this.lineOut);
         this.ms =new MidiSetup();
     }
-
+    public void stop(){
+        synth.stop();
+        lineOut.stop();
+    }
     public MidiSetup getMs() {
         return ms;
     }
@@ -48,8 +51,8 @@ public class MySynth{
         this.synth.start();
     }
     public void setUp () {
-
-        ms.selectMidiDevice(6,ms.listMidiDevices());
+        //we select on gui
+       // ms.selectMidiDevice(6);
 
         this.midiToVoices = new MidiToVoices();
 

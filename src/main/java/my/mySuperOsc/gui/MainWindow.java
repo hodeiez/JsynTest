@@ -1,8 +1,6 @@
 package my.mySuperOsc.gui;
 
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.Pane;
@@ -11,8 +9,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 public class MainWindow {
 

@@ -7,6 +7,11 @@ import java.util.Map;
 
 public class MidiSetup {
     MidiDevice selectedDevice;
+    Map<Integer,MidiDevice> devices;
+
+    public MidiSetup() {
+        this.devices = listMidiDevices();
+    }
 
     public MidiDevice getSelectedDevice() {
         return selectedDevice;
@@ -31,7 +36,7 @@ public class MidiSetup {
     public void setMidiDevice(MidiDevice device){
         this.selectedDevice = device;
     }
-    public void selectMidiDevice(Integer index,Map<Integer,MidiDevice> devices) {
+    public void selectMidiDevice(Integer index) {
         setMidiDevice(devices.get(index));
     }
     public void connectMidiKeyboard(MidiDevice midiDevice, ReceiverAdapter rc) throws MidiUnavailableException {
