@@ -25,6 +25,7 @@ public class Main extends Application {
         Controller controller = new Controller();
 
         NeonButton startButton = new NeonButton("Click Me to Start Synth");
+
         startButton.setOnAction(e -> controller.startSynth());
 
         NeonComboBox comboBox = controller.startDevicesComboBox();

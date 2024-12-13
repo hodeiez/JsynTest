@@ -5,7 +5,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import my.mySuperOsc.gui.components.NeonComboBox;
+import my.mySuperOsc.soundEngines.OscillatorType;
 import my.mySuperOsc.theSynth.MySynth;
+import my.mySuperOsc.theSynth.SynthConfigurator;
+
+import java.util.List;
 
 public class Controller {
 
@@ -17,6 +21,8 @@ public class Controller {
 
     public void getInternalInfo() {
 
+        mySynth.setVoices(SynthConfigurator.buildOscillatorsToVoices(List.of(OscillatorType.SAW_OSC,OscillatorType.SINE_OSC)
+                ,SynthConfigurator.buildVoicesByAmount(7)));
         mySynth.getMs().listMidiDevices();
 
     }

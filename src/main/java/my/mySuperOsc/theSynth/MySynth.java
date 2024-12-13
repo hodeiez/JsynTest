@@ -7,16 +7,19 @@ import my.mySuperOsc.midi.MidiSetup;
 import my.mySuperOsc.midi.ReceiverAdapter;
 import my.mySuperOsc.midiToSynth.MidiToVoices;
 import my.mySuperOsc.soundEngines.MyVoice;
+import my.mySuperOsc.soundEngines.OscillatorType;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MySynth{
     private ReceiverAdapter receiver;
     private final Synthesizer synth;
     private final LineOut lineOut;
     private MidiToVoices midiToVoices;
-    private List<MyVoice> voices;
+    private List<MyVoice> voices = new ArrayList<>();
     private MidiSetup ms;
 
     public MySynth() {
@@ -25,6 +28,14 @@ public class MySynth{
         this.receiver= new ReceiverAdapter();
         this.synth.add(this.lineOut);
         this.ms =new MidiSetup();
+    }
+    public void setVoices(List<MyVoice> voices){
+        this.voices = voices;
+
+    }
+    public void addVoice(MyVoice voice){
+       this.voices.add(voice);
+        System.out.println(voice.getUuid());
     }
     public void stop(){
         synth.stop();
@@ -46,6 +57,10 @@ public class MySynth{
         return voices;
     }
 
+    public void setOscillatorsToVoices(List<UnitOscillator> oscillators){
+        this.getVoices().forEach(v->v.setOscillators(oscillators));
+    }
+
     public void start(){
         this.lineOut.start();
         this.synth.start();
@@ -55,17 +70,8 @@ public class MySynth{
        // ms.selectMidiDevice(6);
 
         this.midiToVoices = new MidiToVoices();
+       this.voices.forEach(v->v.getOscillators().forEach(synth::add));
 
-
-        var voice = new MyVoice();
-        var voice2 = new MyVoice();
-        var voice3 = new MyVoice();
-        voice.setOscillators( List.of(new SineOscillator(), new SineOscillator()));
-        voice2.setOscillators( List.of( new SineOscillatorPhaseModulated(), new SineOscillator()));
-        voice3.setOscillators( List.of( new SineOscillatorPhaseModulated(), new SineOscillator()));
-        this.voices=List.of(voice,voice2,voice3);
-
-        this.voices.forEach(v->v.getOscillators().forEach(osc ->synth.add(osc)));
         var lag = new LinearRamp();
         this.midiToVoices.setLag(lag);
 

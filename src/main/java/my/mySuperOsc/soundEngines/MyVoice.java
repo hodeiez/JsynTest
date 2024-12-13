@@ -17,6 +17,7 @@ public class MyVoice implements UnitVoice {
 
     public int getOscillatorAmount() {
         return oscillators.size();
+
     }
 
     public MyVoice() {
