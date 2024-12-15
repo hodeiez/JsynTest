@@ -1,6 +1,5 @@
 package my.mySuperOsc.gui;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -9,6 +8,7 @@ import my.mySuperOsc.soundEngines.OscillatorType;
 import my.mySuperOsc.theSynth.MySynth;
 import my.mySuperOsc.theSynth.SynthConfigurator;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class Controller {
@@ -26,7 +26,10 @@ public class Controller {
         mySynth.getMs().listMidiDevices();
 
     }
+    public void selectVoiceAmount(int amount, List<OscillatorType> oscillatorTypes) {
+        mySynth.setVoices(SynthConfigurator.buildOscillatorsToVoices(oscillatorTypes, SynthConfigurator.buildVoicesByAmount(amount)));
 
+    }
     public void startSynth() {
         Task<Void> task = new Task<>() {
             @Override
@@ -50,13 +53,26 @@ public class Controller {
                 mySynth.getMs().listMidiDevices().forEach((integer, midiDevice) -> devices.add(integer + "-" + midiDevice.getDeviceInfo().toString()));
         return new NeonComboBox(devices);
     }
-
+    public NeonComboBox fillOscillatorsInCombo(){
+        ObservableList<String> oscillators = FXCollections.observableArrayList();
+        EnumSet.allOf(OscillatorType.class).stream().map(Enum::name).forEach(oscillators::add);
+        return new NeonComboBox(oscillators);
+    }
 
     public NeonComboBox startDevicesComboBox () {
         NeonComboBox comboBox = fillMidiDevicesInCombo();
         comboBox.getSelectionModel().selectedItemProperty().addListener((obsv,oldv,newv)->{
             if(newv!=null){
                 comboBox.handleDeviceSelection((String) newv,mySynth);
+            }
+        });
+        return comboBox;
+    }
+    public NeonComboBox startOscillatorsComboBox () {
+        NeonComboBox comboBox = fillOscillatorsInCombo();
+        comboBox.getSelectionModel().selectedItemProperty().addListener((obsv,oldv,newv)->{
+            if(newv!=null){
+                comboBox.handleOscillatorSelection((String) newv,mySynth);
             }
         });
         return comboBox;
