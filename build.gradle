@@ -16,8 +16,7 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation "com.github.philburk:jsyn:latest.release"
-    implementation 'com.thoughtworks.xstream:xstream:1.4.10-java7'
-}
+    implementation 'com.thoughtworks.xstream:xstream:1.4.18'}
 
 javafx {
         version = "21"

@@ -8,8 +8,10 @@ import my.mySuperOsc.gui.components.NeonComboBox;
 import my.mySuperOsc.soundEngines.OscillatorType;
 import my.mySuperOsc.theSynth.MySynth;
 import my.mySuperOsc.theSynth.config.ConfigModel;
+import my.mySuperOsc.theSynth.config.ConfigRepo;
 import my.mySuperOsc.theSynth.config.SynthConfigurator;
 
+import java.io.FileNotFoundException;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -24,15 +26,24 @@ public class Controller {
     }
 
     public void getConfigInfo() {
-        System.out.println(configModel.getOscType1());
+
         mySynth.setVoices(SynthConfigurator.buildOscillatorsToVoices(List.of(configModel.oscillatorType(configModel.getOscType1()),configModel.oscillatorType(configModel.getOscType2()))
-                ,SynthConfigurator.buildVoicesByAmount(7)));
+                ,SynthConfigurator.buildVoicesByAmount(configModel.getVoiceAmount())));
         mySynth.getMs().listMidiDevices();
 
-    }
-    public void selectVoiceAmount(int amount, List<OscillatorType> oscillatorTypes) {
-        mySynth.setVoices(SynthConfigurator.buildOscillatorsToVoices(oscillatorTypes, SynthConfigurator.buildVoicesByAmount(amount)));
+            new Thread(()-> {
+                try {
+                    ConfigRepo.saveConfigToXML(configModel);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
 
+
+    }
+    public void selectVoiceAmount(int amount) {
+        //mySynth.setVoices(SynthConfigurator.buildOscillatorsToVoices(oscillatorTypes, SynthConfigurator.buildVoicesByAmount(amount)));
+        configModel.setVoiceAmount(amount);
     }
     public void startSynth() {
         Task<Void> task = new Task<>() {
@@ -49,7 +60,6 @@ public class Controller {
         mySynth.stop();
     }
 
-    //TODO: Move functions to component
 
     public NeonComboBox fillMidiDevicesInCombo(){
         ObservableList<String> devices = FXCollections.observableArrayList();
@@ -76,7 +86,6 @@ public class Controller {
         NeonComboBox comboBox = fillOscillatorsInCombo();
         comboBox.getSelectionModel().selectedItemProperty().addListener((obsv,oldv,newv)->{
             if(newv!=null){
-                System.out.println(numb);
                 handleOscillatorSelection((String) newv,numb);
             }
         });

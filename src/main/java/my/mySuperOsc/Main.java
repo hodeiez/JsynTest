@@ -32,7 +32,7 @@ public class Main extends Application {
 
 
         startButton.setOnAction(e -> controller.startSynth());
-
+        selectVoiceAmount.setOnMouseClicked(e->controller.selectVoiceAmount(selectVoiceAmount.getNumber().intValue()));
         NeonComboBox devicesComboBox = controller.startDevicesComboBox();
         NeonComboBox oscillatorsComboBox = controller.startOscillatorsComboBox("1");
         NeonComboBox oscillators2ComboBox = controller.startOscillatorsComboBox("2");
