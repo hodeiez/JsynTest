@@ -3,24 +3,22 @@ package my.mySuperOsc.gui.components;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 
 import java.math.BigDecimal;
 
 public class NeonNumberInput extends HBox implements INeonComponents{
-    private TextArea textField;
+    private Text textField;
     private BigDecimal stepWidth = BigDecimal.ONE;
     private BigDecimal number = BigDecimal.ZERO;
 
     @Override
     public void styleIt(){
 
-        this.textField.setMaxHeight(0.001);
-        this.textField.setPrefHeight(0.001);
-        this.textField.setPrefWidth(0.001);
-        this.textField.setMaxWidth(0.001);
-
-
+        textField.setTextAlignment(TextAlignment.CENTER);
+        textField.setTranslateY(5.);
         this.setMaxHeight(0.02);
         this.setMaxWidth(0.02);
     }
@@ -28,7 +26,7 @@ public class NeonNumberInput extends HBox implements INeonComponents{
     public NeonNumberInput (BigDecimal initialValue) {
         super();
 
-        this.textField = new TextArea();
+        this.textField = new Text();
         this.initHandlers();
         this.styleIt();
         this.setNumber(initialValue);
