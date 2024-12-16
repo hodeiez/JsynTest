@@ -1,5 +1,7 @@
 package my.mySuperOsc.theSynth.config;
 
+import my.mySuperOsc.soundEngines.OscillatorType;
+
 public class ConfigModel {
     private int selectedDevice;
     private int voiceAmount;
@@ -39,5 +41,14 @@ public class ConfigModel {
 
     public void setOscType2(String oscType2) {
         this.oscType2 = oscType2;
+    }
+    public OscillatorType oscillatorType(String oscType){
+        return switch (oscType) {
+            case "SAW_OSC" -> OscillatorType.SAW_OSC;
+            case "SINE_OSC" -> OscillatorType.SINE_OSC;
+            case "SQUARE_OSC" -> OscillatorType.SQUARE_OSC;
+
+            default -> throw new IllegalStateException("Unexpected value: " + oscType);
+        };
     }
 }

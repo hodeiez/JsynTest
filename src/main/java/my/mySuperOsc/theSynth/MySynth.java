@@ -7,12 +7,10 @@ import my.mySuperOsc.midi.MidiSetup;
 import my.mySuperOsc.midi.ReceiverAdapter;
 import my.mySuperOsc.midiToSynth.MidiToVoices;
 import my.mySuperOsc.soundEngines.MyVoice;
-import my.mySuperOsc.soundEngines.OscillatorType;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MySynth{
     private ReceiverAdapter receiver;
@@ -93,7 +91,7 @@ public class MySynth{
         try {
             ms.getSelectedDevice().open();
             ms.connectMidiKeyboard(ms.getSelectedDevice(), receiver);
-            System.out.println(ms.getSelectedDevice().getTransmitters().size());
+            System.out.println(ms.getSelectedDevice());
         } catch (MidiUnavailableException e){
             System.out.println("WRONG SELECTED MIDI");
         }

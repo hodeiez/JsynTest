@@ -1,4 +1,4 @@
-package my.mySuperOsc.theSynth;
+package my.mySuperOsc.theSynth.config;
 
 import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.SineOscillator;

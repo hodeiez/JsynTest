@@ -11,6 +11,7 @@ import my.mySuperOsc.gui.components.NeonButton;
 import my.mySuperOsc.gui.components.NeonComboBox;
 import my.mySuperOsc.gui.components.NeonPane;
 import my.mySuperOsc.gui.components.NeonNumberInput;
+import my.mySuperOsc.theSynth.config.ConfigModel;
 
 import java.math.BigDecimal;
 
@@ -28,11 +29,15 @@ public class Main extends Application {
 
         NeonButton startButton = new NeonButton("Click Me to Start Synth");
         NeonNumberInput selectVoiceAmount = new NeonNumberInput(new BigDecimal(0));
+
+
         startButton.setOnAction(e -> controller.startSynth());
 
         NeonComboBox devicesComboBox = controller.startDevicesComboBox();
-        NeonComboBox oscillatorsComboBox = controller.startOscillatorsComboBox();
-        NeonComboBox oscillators2ComboBox = controller.startOscillatorsComboBox();
+        NeonComboBox oscillatorsComboBox = controller.startOscillatorsComboBox("1");
+        NeonComboBox oscillators2ComboBox = controller.startOscillatorsComboBox("2");
+
+
 
         Pane root =MainWindow.start();
         NeonPane config = new NeonPane("Config");

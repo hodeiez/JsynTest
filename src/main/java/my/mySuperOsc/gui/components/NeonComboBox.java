@@ -26,6 +26,7 @@ public class NeonComboBox extends ComboBox implements INeonComponents {
             @Override
             protected Void call() {
                 mySynth.getMs().selectMidiDevice(Integer.parseInt(selected.substring(0,selected.indexOf("-"))));
+                System.out.println(mySynth.getMs().getSelectedDevice());
                 return null;
             }
         };
@@ -33,16 +34,5 @@ public class NeonComboBox extends ComboBox implements INeonComponents {
         task.setOnSucceeded(e-> Platform.runLater(()-> System.out.println(selected + " selected")));
         task.setOnFailed(e-> System.out.println("fucked up selecting"));
     }
-    public void handleOscillatorSelection(String selected, MySynth mySynth){
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() {
-                System.out.println("notImplemented");
-                return null;
-            }
-        };
-        new Thread(task).start();
-        task.setOnSucceeded(e-> Platform.runLater(()-> System.out.println(selected + " selected")));
-        task.setOnFailed(e-> System.out.println("fucked up selecting"));
-    }
+
 }
